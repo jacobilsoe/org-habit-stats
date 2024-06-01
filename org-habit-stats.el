@@ -58,7 +58,7 @@
     "#ffcf00")
   "Colors to use for bars of bar graph.
 The default colors are Modus Vivendi's colors for graphs. The original value of
-`chart-face-color-list` is unaffected."
+`chart-face-color-list' is unaffected."
   :group 'org-habit-stats
   :type '(list color))
 
@@ -179,7 +179,7 @@ The default colors are Modus Vivendi's colors for graphs. The original value of
     (org-habit-stats-alltime-total . "Total Completions")
     (org-habit-stats-alltime-percentage . "Total Percentage"))
   "Alist mapping stat functions to a list of their names.
-The name is used in the org-habit-stats buffer, and (after
+The name is used in the `org-habit-stats' buffer, and (after
 replacing whitespace with underscores) in properties."
   :group 'org-habit-stats
   :type '(alist :key-type function :value-type string))
@@ -365,7 +365,7 @@ Generated from `org-habit-stats-graph-colors-list'.")
 
 (defface org-habit-stats-section-name
   '((t (:inherit default)))
-  "Face for section name in org-habit-stats buffer."
+  "Face for section name in `org-habit-stats' buffer."
   :group 'org-habit-stats)
 
 ;; Stats functions
@@ -379,7 +379,7 @@ indicating if there was a completion or not on that day.
 
 If today is marked completed, it is included in the history. If today is
 not marked completed, it is included in the history if and only
-if `org-habit-stats-include-uncompleted-today` is t."
+if `org-habit-stats-include-uncompleted-today' is t."
   (let ((today (org-today))
         (bin-hist '())
         (history (reverse history)))
@@ -401,7 +401,7 @@ if `org-habit-stats-include-uncompleted-today` is t."
 (defun org-habit-stats-get-full-history-new-to-old (history)
   "Return the full history of a habit from old to new.
 This returns the reverse of calling
-`org-habit-stats-get-full-history-new-to-old` on HISTORY."
+`org-habit-stats-get-full-history-new-to-old' on HISTORY."
   (reverse (org-habit-stats-get-full-history-old-to-new history)))
 
 (defun org-habit-stats-get-repeat-history-old-to-new (habit-data)
@@ -490,9 +490,6 @@ H must be new-to-old habit history."
     (while (and h (= (cdr (pop h)) 0))
       (setq unstreak (1+ unstreak)))
     unstreak))
-
-
-
 
 (defun org-habit-stats-unstreak (_history history-rev _habit-data)
   "Return the current unstreak (number of consecutive days missed).
@@ -812,7 +809,7 @@ These are overlays corresponding to completed days."
 ;; create calendar buffer, inject text at top, mark custom dates, set so curr month on the right first
 (defun org-habit-stats-make-calendar-buffer (habit-data)
   "Create a `calendar-mode' buffer displaying completed days.
-HABIT-DATA contains the results of `org-habit-parse-todo`."
+HABIT-DATA contains the results of `org-habit-parse-todo'."
   (with-current-buffer
       (get-buffer-create org-habit-stats-calendar-buffer)
     (calendar-mode)
@@ -869,7 +866,7 @@ negative."
 ;;   (org-habit-stats-refresh-buffer))
 
 (defun org-habit-stats--calendar-scroll (n)
-  "Scroll org-habit-stats calendar forward N months.
+  "Scroll `org-habit-stats' calendar forward N months.
 N can be positive, zero, or negative."
   (org-habit-stats-increment-displayed-month n)
   (if (not (derived-mode-p 'org-habit-stats-mode))
@@ -910,20 +907,20 @@ N can be positive, zero, or negative."
 ;;; Graph data functions
 (defun org-habit-stats--unix-from-absolute-time (abs-time)
   "Convert time ABS-TIME (from end of 1 BC) to unix time.
-Used because `org-habit-parse-todo`, `org-today`, etc. all return
+Used because `org-habit-parse-todo', `org-today', etc. all return
 days since the end of 1 BC."
   (- abs-time (org-habit-stats-days-to-time (calendar-absolute-from-gregorian '(12 31 1969)))))
 
 (defun org-habit-stats-format-absolute-time-string (format-string &optional time zone)
   "Format time string given time TIME since end of 1 BC.
-Uses `format-time-string` on FORMAT-STRING."
+Uses `format-time-string' on FORMAT-STRING."
   (format-time-string format-string
                       (org-habit-stats--unix-from-absolute-time time)
                       zone))
 
 (defun org-habit-stats-format-absolute-day-string (format-string &optional day zone)
   "Format time string given days DAY since end of 1 BC.
-Uses `format-time-string` on FORMAT-STRING."
+Uses `format-time-string' on FORMAT-STRING."
   (org-habit-stats-format-absolute-time-string format-string
                                                (org-habit-stats-days-to-time day)
                                                zone))
@@ -1012,7 +1009,7 @@ of HISTORY, HISTORY-REV, HABIT-DATA."
    (name :initarg :name
          :initform "Data"))
   "Class used for all data in different charts.
-Originally defined in charts.el as 'chart-sequence'. In some
+Originally defined in charts.el as `chart-sequence'. In some
 earlier versions of Emacs the name of this class contains a
 typo (chart-sequece) so we redefine it here under a new name.")
 
@@ -1149,12 +1146,12 @@ Corrected to use `org-habit-stats-chart-translate-xpos'."
 
 (cl-defmethod org-habit-stats-chart-draw-data ((c chart-bar))
   "Display the data available in a bar chart C, maybe label with exact values.
-This function is mostly the same as chart.el's `chart-draw-data`,
+This function is mostly the same as chart.el's `chart-draw-data',
 with the following modifications: 1. `chart-draw-line' is replaced
-with org-habit-stats-chart-draw-line, which supports user
+with `org-habit-stats-chart-draw-line', which supports user
 customized line drawing characters. 2. For horizontal charts, the
 rightmost vertical line spans the entire bar height. 3. If
-`org-habit-stats-chart-draw-values` is t, puts the exact value of
+`org-habit-stats-chart-draw-values' is t, puts the exact value of
 a bar next to it.''''"
   (cl-flet ((chart-draw-line (dir zone start end) (org-habit-stats-chart-draw-line-data
                                                    dir zone start end)))
@@ -1582,10 +1579,10 @@ The divider consists of 80 `org-agenda-block-separator'."
 (defun org-habit-stats-create-habit-buffer (habit-data habit-name habit-description habit-source)
   "Create buffer displaying statistics, a calendar, and a bar graph.
 
-HABIT-DATA contains results from `org-habit-stats-parse-todo`.
+HABIT-DATA contains results from `org-habit-stats-parse-todo'.
 The name of the habit HABIT-NAME and description
 HABIT-DESCRIPTION are displayed at the top of the buffer. The
-HABIT-SOURCE is either 'agenda or 'file, indicating what kind of
+HABIT-SOURCE is either `agenda' or `file', indicating what kind of
 buffer the habit was located in. This is used by commands that
 navigate between habits."
   (let* ((history (org-habit-stats-get-repeat-history-old-to-new habit-data))
@@ -1636,16 +1633,16 @@ navigate between habits."
 
 ;;; org-habit-stats commands
 (defun org-habit-stats-parse-todo (&optional pom)
-  "Get habit data by calling `org-habit-parse-todo` on POM.
+  "Get habit data by calling `org-habit-parse-todo' on POM.
 
-Locally sets 'org-habit-preceding-days` to a big value to avoid
+Locally sets `org-habit-preceding-days' to a big value to avoid
 habit data getting truncated."
   (let ((org-habit-preceding-days 40000))
     (org-habit-parse-todo pom)))
 
 ;;;###autoload
 (defun org-habit-stats-view-habit-at-point ()
-  "Open an org-habit-stats buffer for the habit at point in a file."
+  "Open an `org-habit-stats' buffer for the habit at point in a file."
   (interactive)
   (let ((habit-name (org-element-property :raw-value
                                           (save-excursion
@@ -1702,7 +1699,7 @@ habit data getting truncated."
 
 ;;;###autoload
 (defun org-habit-stats-view-habit-at-point-agenda ()
-  "Open an org-habit-stats buffer for the habit at point in agenda buffer."
+  "Open an `org-habit-stats' buffer for the habit at point in agenda buffer."
   (interactive)
   (if (not (derived-mode-p 'org-agenda-mode))
       (user-error "Not in agenda buffer")
@@ -1763,7 +1760,7 @@ habit data getting truncated."
 
 ;;;###autoload
 (defun org-habit-stats-view-next-habit ()
-  "From org-habit-stats buffer, view next habit in file or agenda."
+  "From `org-habit-stats' buffer, view next habit in file or agenda."
   (interactive)
   (if (not (derived-mode-p 'org-habit-stats-mode))
       (user-error "Not in an org-habit-stats-mode buffer")
@@ -1778,7 +1775,7 @@ habit data getting truncated."
 
 ;;;###autoload
 (defun org-habit-stats-view-previous-habit ()
-  "From org-habit-stats buffer, view previous habit in file or agenda."
+  "From `org-habit-stats' buffer, view previous habit in file or agenda."
   (interactive)
   (if (not (derived-mode-p 'org-habit-stats-mode))
       (user-error "Not in an org-habit-stats-mode buffer")
@@ -1794,7 +1791,7 @@ habit data getting truncated."
 
 ;;;###autoload
 (defun org-habit-stats-exit ()
-  "Kill org-habit-stats buffer and the internal calendar buffer."
+  "Kill `org-habit-stats' buffer and the internal calendar buffer."
   (interactive)
    (if (not (derived-mode-p 'org-habit-stats-mode))
       (user-error "Not in an org-habit-stats-mode buffer")
@@ -1835,7 +1832,7 @@ habit data getting truncated."
   "Keymap for `org-habit-stats-mode'.")
 
 (define-derived-mode org-habit-stats-mode special-mode "Org-Habit-Stats"
-  "A major mode for the org-habit-stats window.
+  "A major mode for the `org-habit-stats' window.
 \\<org-habit-stats-mode-map>\\{org-habit-stats-mode-map}"
   (setq buffer-read-only nil
         buffer-undo-list t
