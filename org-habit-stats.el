@@ -407,14 +407,14 @@ This returns the reverse of calling
 (defun org-habit-stats-get-repeat-history-old-to-new (habit-data)
   "Return the history of a habit accounting for the repeat interval.
 
-HABIT-DATA contains the result of calliing
+HABIT-DATA contains the result of calling
 `org-habit-stats-parse-todo' on a habit.
 
 It modifies the full history of a habit (see
 `org-habit-stats-get-full-history-new-to-old') by removing
 certain days without completions.  For ++n or +n style habits,
-misses occuring n-1 days after a scheduled date are removed.  For
-.+n style habits, misses occuring n-1 days after a completed day
+misses occurring n-1 days after a scheduled date are removed.  For
+.+n style habits, misses occurring n-1 days after a completed day
 are removed."
   (let* ((partial-history (nth 4 habit-data))
          (repeat-type (nth 5 habit-data))
@@ -1439,7 +1439,7 @@ HABIT-DATA is the result of calling `org-habit-parse-todo'."
             "\n")))
 
 (defun org-habit-stats-format-one-stat (statname statdata)
-  "Format stiatistic with name STATNAME and value STATDATA."
+  "Format statistics with name STATNAME and value STATDATA."
   (let* ((fdata (cond ((integerp statdata) (format "%d" statdata))
                       ((floatp statdata) (format "%.2f" statdata))
                       (t statdata)))
